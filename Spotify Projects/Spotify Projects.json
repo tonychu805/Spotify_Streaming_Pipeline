@@ -1,0 +1,41 @@
+{
+  "name" : "Spotify Projects",
+  "jobMode" : "VISUAL",
+  "description" : "",
+  "role" : "arn:aws:iam::446069160429:role/glue_access_s3",
+  "executionProperty" : {
+    "maxConcurrentRuns" : 1
+  },
+  "command" : {
+    "name" : "glueetl",
+    "scriptLocation" : "s3://aws-glue-assets-446069160429-ap-southeast-1/scripts/Spotify Projects.py",
+    "pythonVersion" : "3"
+  },
+  "defaultArguments" : {
+    "--enable-metrics" : "true",
+    "--enable-spark-ui" : "true",
+    "--spark-event-logs-path" : "s3://aws-glue-assets-446069160429-ap-southeast-1/sparkHistoryLogs/",
+    "--enable-job-insights" : "false",
+    "--enable-observability-metrics" : "true",
+    "--enable-glue-datacatalog" : "true",
+    "--enable-continuous-cloudwatch-log" : "true",
+    "--job-bookmark-option" : "job-bookmark-disable",
+    "--job-language" : "python",
+    "--TempDir" : "s3://aws-glue-assets-446069160429-ap-southeast-1/temporary/"
+  },
+  "maxRetries" : 0,
+  "allocatedCapacity" : 5,
+  "timeout" : 2880,
+  "maxCapacity" : 5.0,
+  "glueVersion" : "4.0",
+  "numberOfWorkers" : 5,
+  "workerType" : "G.1X",
+  "executionClass" : "STANDARD",
+  "codeGenConfigurationNodes" : "{\"node-1722755976344\":{\"Join\":{\"Columns\":[{\"From\":\"node-1722755914740\",\"Keys\":[[\"track_id\"]]},{\"From\":\"node-1722755813959\",\"Keys\":[[\"id\"]]}],\"Inputs\":[\"node-1722755914740\",\"node-1722755813959\"],\"JoinType\":\"equijoin\",\"Name\":\"Join w/ tracks\"}},\"node-1722756072263\":{\"S3GlueParquetTarget\":{\"AutoDataQuality\":{\"IsEnabled\":false},\"Compression\":\"snappy\",\"Inputs\":[\"node-1722756016812\"],\"Name\":\"Amazon S3\",\"PartitionKeys\":[],\"Path\":\"s3://project-spotify-tonychu/datawarehouse/\",\"SchemaChangePolicy\":{\"EnableUpdateCatalog\":false}}},\"node-1722755810486\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://project-spotify-tonychu/staging/spotify-albums_data_2023.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"albums\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"track_name\",\"Type\":\"string\"},{\"Name\":\"track_id\",\"Type\":\"string\"},{\"Name\":\"track_number\",\"Type\":\"string\"},{\"Name\":\"duration_ms\",\"Type\":\"string\"},{\"Name\":\"album_type\",\"Type\":\"string\"},{\"Name\":\"artists\",\"Type\":\"string\"},{\"Name\":\"total_tracks\",\"Type\":\"string\"},{\"Name\":\"album_name\",\"Type\":\"string\"},{\"Name\":\"release_date\",\"Type\":\"string\"},{\"Name\":\"label\",\"Type\":\"string\"},{\"Name\":\"album_popularity\",\"Type\":\"string\"},{\"Name\":\"album_id\",\"Type\":\"string\"},{\"Name\":\"artist_id\",\"Type\":\"string\"},{\"Name\":\"artist_0\",\"Type\":\"string\"},{\"Name\":\"artist_1\",\"Type\":\"string\"},{\"Name\":\"artist_2\",\"Type\":\"string\"},{\"Name\":\"artist_3\",\"Type\":\"string\"},{\"Name\":\"artist_4\",\"Type\":\"string\"},{\"Name\":\"artist_5\",\"Type\":\"string\"},{\"Name\":\"artist_6\",\"Type\":\"string\"},{\"Name\":\"artist_7\",\"Type\":\"string\"},{\"Name\":\"artist_8\",\"Type\":\"string\"},{\"Name\":\"artist_9\",\"Type\":\"string\"},{\"Name\":\"artist_10\",\"Type\":\"string\"},{\"Name\":\"artist_11\",\"Type\":\"string\"},{\"Name\":\"duration_sec\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://project-spotify-tonychu/staging/spotify-albums_data_2023.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1722755914740\":{\"Join\":{\"Columns\":[{\"From\":\"node-1722755810486\",\"Keys\":[[\"artist_id\"]]},{\"From\":\"node-1722755779247\",\"Keys\":[[\"id\"]]}],\"Inputs\":[\"node-1722755810486\",\"node-1722755779247\"],\"JoinType\":\"equijoin\",\"Name\":\"Join album & artist\"}},\"node-1722755779247\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://project-spotify-tonychu/staging/spotify_artist_data_2023.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"artists\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"id\",\"Type\":\"string\"},{\"Name\":\"name\",\"Type\":\"string\"},{\"Name\":\"artist_popularity\",\"Type\":\"string\"},{\"Name\":\"artist_genres\",\"Type\":\"string\"},{\"Name\":\"followers\",\"Type\":\"string\"},{\"Name\":\"genre_0\",\"Type\":\"string\"},{\"Name\":\"genre_1\",\"Type\":\"string\"},{\"Name\":\"genre_2\",\"Type\":\"string\"},{\"Name\":\"genre_3\",\"Type\":\"string\"},{\"Name\":\"genre_4\",\"Type\":\"string\"},{\"Name\":\"genre_5\",\"Type\":\"string\"},{\"Name\":\"genre_6\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://project-spotify-tonychu/staging/spotify_artist_data_2023.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}},\"node-1722756016812\":{\"DropFields\":{\"Inputs\":[\"node-1722755976344\"],\"Name\":\"Drop Fields\",\"Paths\":[]}},\"node-1722755813959\":{\"S3CsvSource\":{\"AdditionalOptions\":{\"EnableSamplePath\":false,\"SamplePath\":\"s3://project-spotify-tonychu/staging/spotify_tracks_data_2023.csv\"},\"Escaper\":\"\",\"Exclusions\":[],\"Name\":\"tracks\",\"OptimizePerformance\":false,\"OutputSchemas\":[{\"Columns\":[{\"Name\":\"id\",\"Type\":\"string\"},{\"Name\":\"track_popularity\",\"Type\":\"string\"},{\"Name\":\"explicit\",\"Type\":\"string\"}]}],\"Paths\":[\"s3://project-spotify-tonychu/staging/spotify_tracks_data_2023.csv\"],\"QuoteChar\":\"quote\",\"Recurse\":true,\"Separator\":\"comma\",\"WithHeader\":true}}}",
+  "sourceControlDetails" : {
+    "provider" : "GITHUB",
+    "repository" : "aws-glue-etl",
+    "branch" : "main",
+    "folder" : "Spotify Projects"
+  }
+}
